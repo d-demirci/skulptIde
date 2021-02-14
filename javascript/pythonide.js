@@ -70,7 +70,7 @@ var setProgram = function (program) {}
 // Returns the contents of the editor
 var getProgram = function () {}
 
-// The codemirror editor
+// The ace editor
 var editor;
 
 // 
@@ -88,8 +88,12 @@ function setupPythonIDE (codeId,outputId,canvasId) {
     // output functions are configurable.  This one just appends some text
     // to a pre element.
     function outf(text) { 
-        var mypre = document.getElementById(outputId); 
-        mypre.innerHTML = mypre.innerHTML + text; 
+        try {
+            var mypre = document.getElementById(outputId); 
+            mypre.innerHTML = mypre.innerHTML + text; 
+        } catch (error) {
+            
+        }
     } 
 
 
@@ -104,25 +108,26 @@ function setupPythonIDE (codeId,outputId,canvasId) {
     // Clears outputId and canvasId
     clearit = function () {
         stopit();
-        var mypre = document.getElementById(outputId); 
-        mypre.innerHTML = "";   
-        var can = document.getElementById(canvasId);
-        can.innerHTML = "";     
+        try {
+            var mypre = document.getElementById(outputId); 
+            mypre.innerHTML = "";   
+            var can = document.getElementById(canvasId);
+            can.innerHTML = "";     
+        } catch (error) {
+            
+        }
     }
-
-    
 
     // Here's everything you need to run a python program in skulpt
     // grab the code from your textarea
     // get a reference to your pre element for output
     // configure the output function
     // call Sk.importMainWithBody()
-    runit = function () { 
+    runit = function (code) { 
 
         stopit();
         clearit();
-
-        var prog = editor.getValue(); 
+        var prog = code || editor.getValue()
         var mypre = document.getElementById(outputId); 
         mypre.innerHTML = ''; 
         Sk.pre = outputId;
@@ -198,32 +203,9 @@ function setupPythonIDE (codeId,outputId,canvasId) {
     // Replace the textarea by a codemirror editor
     // 
     function createEditor () {
-        var textarea = document.getElementById(codeId);
-        editor = CodeMirror.fromTextArea(textarea, {
-            mode: {name: "python",
-                   version: 2,
-                   singleLineStringErrors: false
-               },
-            lineNumbers: true,
-            textWrapping: false,
-            indentUnit: 4,
-            indentWithTabs: false,
-            fontSize: "10pt",
-            autoMatchParens: true,
-            matchBrackets: true,
-            theme: "solarized",
-            extraKeys:{
-                Tab: function (cm) {
-                    if (cm.doc.somethingSelected()) {
-                        return CodeMirror.Pass;
-                    }
-                    var spacesPerTab = cm.getOption("indentUnit");
-                    var spacesToInsert = spacesPerTab - (cm.doc.getCursor("start").ch % spacesPerTab);    
-                    var spaces = Array(spacesToInsert + 1).join(" ");
-                    cm.replaceSelection(spaces, "end", "+input");
-                }
-            }
-        });
+        editor = ace.edit(codeId);
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/python");
         
     }
 
