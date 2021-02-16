@@ -3,15 +3,9 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" type="text/css" href="style/codemirror.css">
-    <link rel="stylesheet" type="text/css" href="style/solarized.css">
-    <link rel="stylesheet" type="text/css" href="style/skulptide.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="bootstrap/dist/css/bootstrap.min.css">
     <script src="jquery/dist/jquery.min.js"></script>
-    <script src="javascript/codemirror.js"></script>
-    <script src="javascript/matchbrackets.js"></script>
-    <script src="javascript/python.js"></script>
     <script src="javascript/skulpt.min.js"></script>
     <script src="javascript/skulpt-stdlib.js"></script>
     <script src="javascript/processing.min.js"></script>
@@ -21,19 +15,11 @@
 
     <script src="bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="split/gist.css">
-    <link rel="stylesheet" type="text/css" href="split/index.css">
-    <link rel="stylesheet" type="text/css" href="split/splitjs.css">
-    <link rel="stylesheet" type="text/css" href="split/font.css">
+    <link rel="stylesheet" type="text/css" href="javascript/split/gist.css">
+    <link rel="stylesheet" type="text/css" href="javascript/split/index.css">
+    <link rel="stylesheet" type="text/css" href="javascript/split/splitjs.css">
+    <link rel="stylesheet" type="text/css" href="javascript/split/font.css">
     <style>
-        #editor { 
-            margin: 0;
-            position: relative;
-            top: 0;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-        }
         #statusBar {
             margin: 0;
             padding: 0;
@@ -45,30 +31,44 @@
             background-color: rgb(245, 245, 245);
             color: gray;
         }
+
         .ace_status-indicator {
             color: gray;
             position: absolute;
             right: 0;
             border-left: 1px solid;
         }
+
+        .jumbotron {
+            padding-top: 10px !important;
+            padding-bottom: 10px !important;
+        }
+
+        #code {
+            font-size: 16pt;
+        }
     </style>
 
 </head>
 
 <body>
-    
+
     <div class="container">
+        <div class="jumbotron">
+            <h1>Python Runner</h1>
+            <p>Supported libraries, turtle, processing, pygal, builtin-types</p>
+        </div>
         <div class="row">
-            <div class="btn-group" role="group" aria-label="buttons">
-                <button class="btn" onclick="newProgram()"><i class="fa fa-plus"></i></button>
-                <button class="btn" onclick="runProgram()"><i class="fa fa-play"></i></button>
-                <button class="btn" onclick="stopit()"><i class="fa fa-stop"></i></button>
-                <button class="btn" onclick="clearit()"><i class="fa fa-close"></i></button>
-                <label class="btn" for="loadfile"><i class="fa fa-folder"></i>
+            <div class="btn-group" style="line-height:0px;" role="group" aria-label="buttons">
+                <button class="btn" onclick="newProgram()"><i class="fa fa-2x fa-plus"></i></button>
+                <button class="btn" onclick="runProgram()"><i class="fa fa-2x fa-play"></i></button>
+                <button class="btn" onclick="stopit()"><i class="fa fa-2x fa-stop"></i></button>
+                <button class="btn" onclick="clearit()"><i class="fa fa-2x fa-close"></i></button>
+                <label class="btn" for="loadfile"><i class="fa fa-2x fa-folder"></i>
                     <input type="file" id="loadfile" name="files[]" style="visibility:hidden;display:none;"
                         onchange="loadit(this)"></input>
                 </label>
-                <button class="btn" onclick="saveit()"><i class="fa fa-floppy-o"></i></button>
+                <button class="btn" onclick="saveit()"><i class="fa fa-2x fa-floppy-o"></i></button>
                 <input class="form-control" type="hidden" id="savefilename" value="program.py" />
                 <br /><br />
             </div>
@@ -77,7 +77,7 @@
             <div class="split-parent" style="display:flex">
                 <div id="js-2">
                     <div class="gist">
-                        <div class="gist-file" style="height:250px;">
+                        <div class="gist-file" style="height:100%;">
                             <div class="gist-data">
                                 <div itemprop="text" class="blob-wrapper data type-json">
                                     <div id="code" style="height:400px;"></div>
@@ -88,27 +88,22 @@
                 </div>
                 <div id="html-2">
                     <div class="gist">
-                        <div class="gist-file" style="height:250px;">
+                        <div class="gist-file" style="height:100%;">
                             <div class="gist-data">
                                 <div itemprop="text" class="blob-wrapper data type-css">
-                                    <div id="canvas" height="500" width="500" ></div>
-
+                                    <div id="canvas" height="100%" width="100%"></div>
+                                    <div class="col-md-12" id="output"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
             </div>
-            <div class="col-md-12" id="output"></div>
         </div>
-        
     </div>
-   
 
-
-    <script async defer type="text/javascript" src="split/web-font.js"></script>
-    <script type="text/javascript" src="split/split.min.js"></script>
+    <script async defer type="text/javascript" src="javascript/split/web-font.js"></script>
+    <script type="text/javascript" src="javascript/split/split.min.js"></script>
     <script>
         Split(['#js-2', '#html-2'], {
             sizes: [60, 40],
@@ -131,20 +126,28 @@
             }
         })
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript"
+        charset="utf-8"></script>
     <script src="javascript/pythonide.js"></script>
     <script type="text/javascript">
 
         // These control the behavior of the script
+        sample_program =
+            ['from turtle import *',
+                'turtle = Turtle()',
+                'turtle.shape("turtle")',
+                'screen = Screen()',
+                'screen.bgcolor("black")',
+                'colours = ["red", "purple", "blue", "green", "orange", "yellow"]',
+                'for i in range(360):',
+                '    turtle.color(colours[i % 6])',
+                '    turtle.width(i / 100 + 1)',
+                '    turtle.forward(i)',
+                '    turtle.left(59)'];
         var parms = {
             program:  // Initial skulpt program to show in the editor
                 typeof (Storage) !== "undefined" && localStorage.getItem("skulptIdeProgram") ||
-                ["from processing import *",
-                    "",
-                    "def draw():",
-                    "    line(0,0,100,100)",
-                    "",
-                    "run()"].join("\n"),
+                sample_program.join("\n"),
             programName: typeof (Storage) !== "undefined" && localStorage.getItem("skulptIdeProgramName") ||
                 "saveprogram.py",
             noTitle: false,  // Whether to hide the title
@@ -365,7 +368,7 @@
 
     </script>
 
-  
+
 </body>
 
 </html>

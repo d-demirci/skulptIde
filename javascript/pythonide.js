@@ -129,6 +129,7 @@ function setupPythonIDE (codeId,outputId,canvasId) {
         clearit();
         var prog = code || editor.getValue()
         var mypre = document.getElementById(outputId); 
+        var canvasDiv = document.getElementById(canvasId); 
         mypre.innerHTML = ''; 
         Sk.pre = outputId;
         Sk.canvas = canvasId;
@@ -141,7 +142,25 @@ function setupPythonIDE (codeId,outputId,canvasId) {
                Sk.tg.turtleList = [];
            }
         }
-        Sk.configure({output:outf, read:builtinRead}); 
+        Sk.configure({
+            output:outf, 
+            read:builtinRead, 
+            __future__: Sk.python3
+          }); 
+          Sk.externalLibraries = {
+            pygal: {
+                path: 'javascript/pygal.js/__init__.js',
+                dependencies: [
+                    'javascript/highcharts/highcharts.js',
+                    'javascript/highcharts/highcharts-more.js',
+                ],
+            },
+          };
+          if (prog.includes('pygal') ) {
+            Sk.domOutput = function(html) {
+              return $('body').append(html).children().last();
+            };
+          }
         (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = canvasId;
 
 
@@ -190,7 +209,11 @@ function setupPythonIDE (codeId,outputId,canvasId) {
         });
 
         myPromise.then(function(mod) {
-        // console.log('success');
+            if(prog.includes('pygal')){
+              var graph = $('.highcharts-container ').parent()[0]
+              canvasDiv.append(graph)
+            }
+            console.log('success');
         },
            Sk.uncaughtException 
         );
