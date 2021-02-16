@@ -19,6 +19,11 @@
     <link rel="stylesheet" type="text/css" href="javascript/split/index.css">
     <link rel="stylesheet" type="text/css" href="javascript/split/splitjs.css">
     <link rel="stylesheet" type="text/css" href="javascript/split/font.css">
+    <script>function myFunction() {
+        var popup = document.getElementById("myPopup");
+        popup.classList.toggle("show");
+       $(".popup").toggleClass('active');
+      }</script>
     <style>
         #statusBar {
             margin: 0;
@@ -47,6 +52,75 @@
         #code {
             font-size: 16pt;
         }
+        .banner_img {       
+            height: auto;
+            max-height: 10vh;
+            margin-bottom: 0px;
+        }
+        .logo_img {       
+            max-height: 30px;
+            margin-bottom: -1px;
+        }
+
+        /* popup */
+        /* Popup container - can be anything you want */
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* The actual popup */
+  .popup .popuptext {
+    visibility: hidden;
+    width: 450px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    margin-left: -80px;
+  }
+  
+  /* Popup arrow */
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 20%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color:  transparent transparent #555 transparent;
+  }
+  
+  /* Toggle this class - hide and show the popup */
+  .popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+  }
+  .popup.active{
+  color: red;
+  }
+  
+  /* Add animation (fade in the popup) */
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
     </style>
 
 </head>
@@ -54,12 +128,13 @@
 <body>
 
     <div class="container">
-        <div class="jumbotron">
-            <h1>Python Runner</h1>
-            <p>Supported libraries, turtle, processing, pygal, builtin-types</p>
-        </div>
+        <!-- <div class="row jumbotron">
+            <div class="col-md-4"><img class="banner_img" src="images/code_runner.png" /></div>
+            <div class="col-md-8"><p>Supported libraries, turtle, processing, pygal, builtin-types</p></div>
+        </div> -->
         <div class="row">
             <div class="btn-group" style="line-height:0px;" role="group" aria-label="buttons">
+                <button class="btn" ><img class="logo_img" src="images/code_runner.png" />&NonBreakingSpace;</button>
                 <button class="btn" onclick="newProgram()"><i class="fa fa-2x fa-plus"></i></button>
                 <button class="btn" onclick="runProgram()"><i class="fa fa-2x fa-play"></i></button>
                 <button class="btn" onclick="stopit()"><i class="fa fa-2x fa-stop"></i></button>
@@ -70,6 +145,10 @@
                 </label>
                 <button class="btn" onclick="saveit()"><i class="fa fa-2x fa-floppy-o"></i></button>
                 <input class="form-control" type="hidden" id="savefilename" value="program.py" />
+                <btn class="btn popup" onclick="myFunction()"><i class="fa fa-2x fa-cog"></i>
+                    <div class="popuptext" id="myPopup">Supported libraries, turtle, processing, pygal, builtin-types</div>
+                </btn>
+                
                 <br /><br />
             </div>
         </div>
